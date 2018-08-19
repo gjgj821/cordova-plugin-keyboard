@@ -35,6 +35,7 @@
         </config-file>
 
         <source-file src="src/android/Keyboard.java" target-dir="src/org/apache/cordova/labs/keyboard" />
+        <source-file src="src/android/AndroidBug5497Workaround.java" target-dir="src/org/apache/cordova/labs/keyboard" />
     </platform>
 
 </plugin>
