@@ -52,6 +52,7 @@ Set to true to shrink the WebView when the keyboard comes up. The WebView shrink
 #### Supported Platforms
 
 - iOS
+- Android
 
 #### Quick Example
 
