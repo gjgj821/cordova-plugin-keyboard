@@ -197,6 +197,7 @@ static IMP WKOriginalImp;
     if (CGRectContainsRect(screen, keyboardIntersection) && !CGRectIsEmpty(keyboardIntersection) && _shrinkView && self.keyboardIsVisible) {
         screen.size.height -= keyboardIntersection.size.height;
         self.webView.scrollView.scrollEnabled = !self.disableScrollingInShrinkView;
+        self.webView.scrollView.contentSize = screen.size;
     }
 
     // A view's frame is in its superview's coordinate system so we need to convert again
