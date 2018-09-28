@@ -94,10 +94,11 @@ public class AndroidBug5497Workaround {
     }
     /**
      * 获取虚拟功能键高度
-     * @param context
+     * @param activity
      * @return
      */
-    public int getNavigationBarHeight(Context context) {
+    public int getNavigationBarHeight(Activity activity) {
+        Context context = activity.getBaseContext();
         int vh = 0;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
