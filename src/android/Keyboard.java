@@ -60,6 +60,13 @@ public class Keyboard extends CordovaPlugin {
         else if("shrinkView".equals(action)){
             setKeyboardShrinksView(args.getBoolean(0));
         }
+        else if("navigationBar".equals(action)){
+            if(workaround.hasNavigationBar(this.cordova.getActivity())){
+                callbackContext.success(workaround.getNavigationBarHeight(this.cordova.getActivity()));
+            }else{
+                callbackContext.success(0);
+            }
+        }
         callbackContext.error(action + " is not a supported action");
         return false;
     }
