@@ -68,10 +68,11 @@ public class AndroidBug5497Workaround {
     }
     /**
      * 获取是否存在NavigationBar
-     * @param context
+     * @param activity
      * @return
      */
-    public boolean hasNavigationBar(Context context) {
+    public boolean hasNavigationBar(Activity activity) {
+        Context context = activity.getBaseContext();
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();
         int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
