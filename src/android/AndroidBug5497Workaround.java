@@ -27,9 +27,15 @@ public class AndroidBug5497Workaround {
     private int usableHeightPrevious;
     private FrameLayout.LayoutParams frameLayoutParams;
     private boolean flag = false;
+    private boolean hasN = false;
+    private int nh = 0;
 
     private AndroidBug5497Workaround(Activity activity) {
         FrameLayout content = (FrameLayout) activity.findViewById(android.R.id.content);
+        hasN = this.hasNavigationBar(activity);
+        if(hasN){
+            nh = getNavigationBarHeight(activity);
+        }
         mChildOfContent = content.getChildAt(0);
         mChildOfContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public void onGlobalLayout() {
@@ -53,7 +59,7 @@ public class AndroidBug5497Workaround {
                 frameLayoutParams.height = usableHeightSansKeyboard - heightDifference;
             } else {
                 // keyboard probably just became hidden
-                frameLayoutParams.height = usableHeightSansKeyboard;
+                frameLayoutParams.height = usableHeightSansKeyboard - nh;
             }
             mChildOfContent.requestLayout();
             usableHeightPrevious = usableHeightNow;
@@ -110,6 +116,7 @@ public class AndroidBug5497Workaround {
             Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
             method.invoke(display, dm);
             vh = dm.heightPixels - windowManager.getDefaultDisplay().getHeight();
+            Log.d("navigation", String.valueOf(vh));
         } catch (Exception e) {
             e.printStackTrace();
         }
