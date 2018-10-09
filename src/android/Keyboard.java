@@ -62,7 +62,7 @@ public class Keyboard extends CordovaPlugin {
         }
         else if("navigationBar".equals(action)){
             if(workaround.hasNavigationBar(this.cordova.getActivity())){
-                callbackContext.success(workaround.getNavigationBarHeight(this.cordova.getActivity()));
+                callbackContext.success(0);
             }else{
                 callbackContext.success(0);
             }
