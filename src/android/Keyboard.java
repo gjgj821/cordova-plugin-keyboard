@@ -9,9 +9,11 @@ import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Keyboard extends CordovaPlugin {
+public class Keyboard extends CordovaPlugin implements View.OnLayoutChangeListener {
 	private static final String TAG = "Keyboard";
 	private static AndroidBug5497Workaround workaround = null;
+	private int keyHeight = 0;
+	private CordovaWebView webView=null;
 	/**
 	 * Sets the context of the Command. This can then be used to do things like
 	 * get file paths associated with the Activity.
@@ -32,13 +34,15 @@ public class Keyboard extends CordovaPlugin {
 				setKeyboardShrinksView(preferences.getBoolean("KeyboardShrinksView", false));
 			}
 		});
-
+        //阀值设置为屏幕高度的1/3
+        keyHeight = cordova.getActivity().getWindowManager().getDefaultDisplay().getHeight()/3;
+		webView.getView().addOnLayoutChangeListener(this);
+		this.webView = webView;
 	}
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         Activity activity = this.cordova.getActivity();
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         View view;
         try {
             view = (View)webView.getClass().getMethod("getView").invoke(webView);
@@ -74,4 +78,17 @@ public class Keyboard extends CordovaPlugin {
     public void setKeyboardShrinksView(boolean flag){
         workaround.switchResize(flag);
 	}
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right,
+                               int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        //现在认为只要控件将Activity向上推的高度超过了1/3屏幕高，就认为软键盘弹起
+        if(oldBottom != 0 && bottom != 0 &&(oldBottom - bottom > keyHeight)){
+            this.webView.sendJavascript("Keyboard.fireOnShowing()");
+            this.webView.sendJavascript("Keyboard.fireOnShow()");
+        }else if(oldBottom != 0 && bottom != 0 &&(bottom - oldBottom > keyHeight)){
+            this.webView.sendJavascript("Keyboard.fireOnHiding()");
+            this.webView.sendJavascript("Keyboard.fireOnHide()");
+        }
+    }
 }
