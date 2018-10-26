@@ -208,7 +208,7 @@ static IMP WKOriginalImp;
 
 - (void)scrollViewDidScroll:(UIScrollView*)scrollView
 {
-    if (_shrinkView && _keyboardIsVisible) {
+    if (_shrinkView && _keyboardIsVisible && !self.disableScrollingInShrinkView) {
         CGFloat maxY = scrollView.contentSize.height - scrollView.bounds.size.height;
         if (scrollView.bounds.origin.y > maxY) {
             scrollView.bounds = CGRectMake(scrollView.bounds.origin.x, maxY,
@@ -216,7 +216,6 @@ static IMP WKOriginalImp;
         }
     }
 }
-
 #pragma mark Plugin interface
 
 - (void)shrinkView:(CDVInvokedUrlCommand*)command
